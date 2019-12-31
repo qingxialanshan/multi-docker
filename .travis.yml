@@ -1,12 +1,13 @@
+language: generic
 sudo: required
 services:
   - docker
 
 before_install:
-  - docker build -t amyl/react-test -f ./client/Dockerfile.dev .
+  - docker build -t amyl/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run amyl/react-test npm test -- --coverage
+  - docker run -e CI=true amyl/react-test npm test -- --coverage
 
 after_sucess:
   - docker build -t amyl/multi-client -f ./cllient
