@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t amyl/react-test -f ./client/Dockerfile.dev
+
+script:
+  - docker run amyl/react-test npm test -- --coverage
+
+after_sucess:
+  - docker build -t amyl/multi-client -f ./cllient
+  - docker build -t amyl/multi-nginx -f ./nginx
+  - docker build -t amyl/multi-server -f ./server
+  - docker build -t amyl/multi-worker -f ./worker
+
+  # Log in to the Docker CLI
+  - echo "$DOCKER_PASSWD" | docker login -u "$DOCKER_ID" --password-stdin
+  #Take those images and push them to docker hub
+  - docker push amyl/multi-client
+  - docker push amyl/multi-nginx
+  - docker push amyl/multi-server
+  - docker push amyl/multi-worker
