@@ -10,10 +10,10 @@ script:
   - docker run -e CI=true amyl/react-test npm test -- --coverage
 
 after_sucess:
-  - docker build -t amyl/multi-client -f ./cllient
-  - docker build -t amyl/multi-nginx -f ./nginx
-  - docker build -t amyl/multi-server -f ./server
-  - docker build -t amyl/multi-worker -f ./worker
+  - docker build -t amyl/multi-client ./client
+  - docker build -t amyl/multi-nginx ./nginx
+  - docker build -t amyl/multi-server ./server
+  - docker build -t amyl/multi-worker ./worker
 
   # Log in to the Docker CLI
   - echo "$DOCKER_PASSWD" | docker login -u "$DOCKER_ID" --password-stdin
